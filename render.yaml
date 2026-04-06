@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: mirofish-backend
+    runtime: docker
+    dockerfilePath: backend/Dockerfile
+    dockerContext: backend
+    envVars:
+      - key: LLM_API_KEY
+        sync: false
+      - key: LLM_BASE_URL
+        value: https://api.moonshot.cn/v1
+      - key: LLM_MODEL_NAME
+        value: moonshot-v1-32k
+      - key: ZEP_API_KEY
+        sync: false
+      - key: FLASK_DEBUG
+        value: "False"
+    healthCheckPath: /health
+    plan: free
