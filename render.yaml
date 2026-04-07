@@ -3,7 +3,7 @@ services:
     name: mirofish-backend
     runtime: docker
     dockerfilePath: backend/Dockerfile
-    dockerContext: backend
+    dockerContext: .
     envVars:
       - key: LLM_API_KEY
         sync: false
