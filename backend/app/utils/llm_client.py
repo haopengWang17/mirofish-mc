@@ -51,6 +51,10 @@ class LLMClient:
         Returns:
             模型响应文本
         """
+        # kimi-k2.5 等模型只允许 temperature=1，自动适配
+        if 'k2' in self.model.lower() or 'kimi-k' in self.model.lower():
+            temperature = 1.0
+
         kwargs = {
             "model": self.model,
             "messages": messages,
