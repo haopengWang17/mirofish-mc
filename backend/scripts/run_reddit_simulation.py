@@ -118,6 +118,7 @@ def setup_oasis_logging(log_dir: str):
 try:
     from camel.models import ModelFactory
     from camel.types import ModelPlatformType
+    from camel.configs import ChatGPTConfig
     import oasis
     from oasis import (
         ActionType,
@@ -460,10 +461,15 @@ class RedditSimulationRunner:
             os.environ["OPENAI_API_BASE_URL"] = llm_base_url
         
         print(f"LLM配置: model={llm_model}, base_url={llm_base_url[:40] if llm_base_url else '默认'}...")
-        
+
+        model_config = None
+        if 'k2' in llm_model.lower() or 'kimi-k' in llm_model.lower():
+            model_config = ChatGPTConfig(temperature=1.0)
+
         return ModelFactory.create(
             model_platform=ModelPlatformType.OPENAI,
             model_type=llm_model,
+            model_config_dict=model_config.__dict__ if model_config else None,
         )
     
     def _get_active_agents_for_round(

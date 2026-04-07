@@ -160,6 +160,7 @@ from action_logger import SimulationLogManager, PlatformActionLogger
 try:
     from camel.models import ModelFactory
     from camel.types import ModelPlatformType
+    from camel.configs import ChatGPTConfig
     import oasis
     from oasis import (
         ActionType,
@@ -1030,10 +1031,17 @@ def create_model(config: Dict[str, Any], use_boost: bool = False):
         os.environ["OPENAI_API_BASE_URL"] = llm_base_url
     
     print(f"{config_label} model={llm_model}, base_url={llm_base_url[:40] if llm_base_url else '默认'}...")
-    
+
+    # kimi-k2.5 等模型只允许 temperature=1，自动适配
+    model_config = None
+    if 'k2' in llm_model.lower() or 'kimi-k' in llm_model.lower():
+        model_config = ChatGPTConfig(temperature=1.0)
+        print(f"  [适配] {llm_model} 强制 temperature=1.0")
+
     return ModelFactory.create(
         model_platform=ModelPlatformType.OPENAI,
         model_type=llm_model,
+        model_config_dict=model_config.__dict__ if model_config else None,
     )
 
 
