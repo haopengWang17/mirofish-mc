@@ -5,7 +5,10 @@ from flask import request, has_request_context
 
 _thread_local = threading.local()
 
+# 优先从项目根目录找 locales，找不到则从 backend/locales 找（Docker 部署兼容）
 _locales_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', 'locales')
+if not os.path.exists(_locales_dir):
+    _locales_dir = os.path.join(os.path.dirname(__file__), '..', '..', 'locales')
 
 # Load language registry
 with open(os.path.join(_locales_dir, 'languages.json'), 'r', encoding='utf-8') as f:
